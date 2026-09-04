@@ -1,32 +1,37 @@
 schema_version: 1
 initialized: false
 project:
-  title: "TODO: Research title"
-  subtitle: "TODO: One-sentence contribution"
-  slug: "paper-project"
-  abstract: "TODO: State the problem, method, result, and contribution."
+  title: "How Much Product Data Is Enough?"
+  subtitle: "Measuring Attribute Saturation in LLM-Based Product Discovery"
+  slug: "autonomous-discovery-product-attribute-saturation"
+  abstract: "We study how product-discovery quality changes as truthful, schema-valid product representations become progressively richer. Using ShoppingBench as the primary benchmark and WebShop for replication, we measure marginal attribute value, saturation, and possible degradation across lexical, dense, and LLM-based discovery pipelines."
   keywords:
-    - "TODO"
+    - "product discovery"
+    - "product attributes"
+    - "information retrieval"
+    - "LLM ranking"
+    - "catalog enrichment"
+    - "attribute saturation"
   arxiv_categories:
+    - "cs.IR"
     - "cs.AI"
 authors:
-  - name: "TODO: Author Name"
+  - name: "Khondoker Ahnaf Prio"
     orcid: null
-    affiliations:
-      - "TODO: Affiliation"
+    affiliations: []
 links:
-  repository: "https://github.com/OWNER/REPOSITORY"
-  site: "https://OWNER.github.io/REPOSITORY/"
+  repository: "https://github.com/ahnafyy/autonomous-discovery-product-attribute-saturation"
+  site: "https://ahnafyy.github.io/autonomous-discovery-product-attribute-saturation/"
 research:
-  random_seed: 20260723
+  random_seed: 20260903
 release:
   version: "0.1.0"
 packages:
   python:
-    distribution: "example-study"
-    import_name: "example_study"
+    distribution: "product-attribute-saturation"
+    import_name: "product_attribute_saturation"
   javascript:
-    name: "@example/example-study"
+    name: "@ahnafyy/product-attribute-saturation"
 licenses:
   code: "MIT"
   content: "CC-BY-4.0"
