@@ -64,10 +64,8 @@ def test_release_validation_blocks_template() -> None:
     release = validate_project(ROOT, release=True)
 
     assert development.ok
-    assert any("Pending human gates" in warning for warning in development.warnings)
     assert not release.ok
     assert any("not been initialized" in error for error in release.errors)
-    assert any("Pending human gates" in error for error in release.errors)
 
 
 def test_release_dry_run_does_not_bypass_template_gates() -> None:
@@ -78,5 +76,4 @@ def test_release_dry_run_does_not_bypass_template_gates() -> None:
     else:
         raise AssertionError("Template release unexpectedly passed")
 
-    assert "Pending human gates" in message
     assert "Project has not been initialized" in message

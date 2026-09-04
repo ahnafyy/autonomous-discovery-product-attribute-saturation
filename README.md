@@ -90,7 +90,6 @@ cannot be enabled by the workflow's least-privilege `GITHUB_TOKEN`.
 
 ## Guides
 
-- [Research cycle](docs/research-cycle.md)
 - [Claim taxonomy](docs/claim-taxonomy.md)
 - [Customizing a study](docs/customizing-a-study.md)
 - [Publication and release](docs/publication-and-release.md)

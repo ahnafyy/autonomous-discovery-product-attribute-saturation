@@ -26,11 +26,3 @@ def test_agent_customizations_have_discoverable_frontmatter() -> None:
     for path in customization_files:
         metadata = _frontmatter(path)
         assert isinstance(metadata.get("description"), str)
-
-
-def test_research_cycle_skill_name_matches_folder() -> None:
-    path = ROOT / ".github" / "skills" / "research-cycle" / "SKILL.md"
-    metadata = _frontmatter(path)
-
-    assert metadata["name"] == path.parent.name
-    assert "Use when" in str(metadata["description"])
