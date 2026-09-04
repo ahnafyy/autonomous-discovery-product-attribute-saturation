@@ -1,5 +1,6 @@
 .DS_Store
 .venv/
+uv.lock
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -10,6 +11,7 @@ dist/
 site/node_modules/
 site/.astro/
 site/dist/
+site/site/
 site/src/generated/*.json
 site/test-results/
 site/playwright-report/
