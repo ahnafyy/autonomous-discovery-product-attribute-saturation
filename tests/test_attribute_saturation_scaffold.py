@@ -1,3 +1,5 @@
+import pytest
+
 from study.attribute_saturation.metrics import marginal_attribute_value, saturation_point
 from study.attribute_saturation.representation import RepresentationLevel, render_product
 
@@ -28,7 +30,7 @@ def test_render_product_is_monotonic_by_declared_groups() -> None:
 
 
 def test_marginal_attribute_value() -> None:
-    assert marginal_attribute_value([0.5, 0.7, 0.72]) == [0.2, 0.020000000000000018]
+    assert marginal_attribute_value([0.5, 0.7, 0.72]) == pytest.approx([0.2, 0.02])
 
 
 def test_saturation_point_uses_best_observed_score() -> None:

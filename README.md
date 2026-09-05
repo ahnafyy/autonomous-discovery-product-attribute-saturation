@@ -108,6 +108,24 @@ The first implementation target is a deterministic pilot that can render several
 
 See [`docs/experiment-plan.md`](docs/experiment-plan.md) and [`research/question.md`](research/question.md) for the complete plan.
 
+### Run the deterministic pilot
+
+ShoppingBench publishes the processed corpus as `resources/documents.jsonl.gz` and
+the single-product tasks as `data/synthesize_product_test.jsonl`. With Java 21 installed:
+
+```bash
+python -m pip install -e '.[experiment]'
+python -m study.run_shoppingbench_pilot \
+  --documents /path/to/ShoppingBench/resources/documents.jsonl.gz \
+  --queries /path/to/ShoppingBench/data/synthesize_product_test.jsonl \
+  --output artifacts/shoppingbench-pilot
+```
+
+The command derives qrels from `reward.product_id`, writes one cumulative corpus and
+one BM25 index per representation level, then emits identical-query JSONL runs,
+paired query-level metrics, and `summary.json`. It does not invoke an LLM or modify
+the source benchmark files.
+
 ## Release framework
 
 This repository was created from a checked research-paper/package template. The existing `paperkit` tooling, claim ledger, reproducibility artifacts, manuscript build, and release validation remain the publication framework. Experimental results should flow into generated artifacts rather than being manually copied into the paper.

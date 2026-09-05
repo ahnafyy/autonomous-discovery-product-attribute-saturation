@@ -7,7 +7,7 @@ def marginal_attribute_value(scores: Sequence[float]) -> list[float]:
     """Return adjacent marginal gains for an ordered score sequence."""
     if len(scores) < 2:
         return []
-    return [current - previous for previous, current in zip(scores, scores[1:])]
+    return [current - previous for previous, current in zip(scores, scores[1:], strict=False)]
 
 
 def saturation_point(

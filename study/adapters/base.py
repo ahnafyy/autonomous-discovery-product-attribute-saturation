@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Mapping, Protocol
+from typing import Protocol
 
 
 @dataclass(frozen=True)
@@ -17,6 +18,13 @@ class ProductRecord:
     fields: Mapping[str, object]
 
 
+@dataclass(frozen=True)
+class RelevanceRecord:
+    query_id: str
+    product_id: str
+    relevance: int = 1
+
+
 class BenchmarkAdapter(Protocol):
     """Minimal contract required by the saturation experiment."""
 
@@ -26,7 +34,7 @@ class BenchmarkAdapter(Protocol):
 
     def queries(self) -> Iterable[QueryRecord]: ...
 
-    def qrels_path(self) -> Path: ...
+    def qrels(self) -> Iterable[RelevanceRecord]: ...
 
     def build_index(self, rendered_documents: Path, output_dir: Path) -> None: ...
 
