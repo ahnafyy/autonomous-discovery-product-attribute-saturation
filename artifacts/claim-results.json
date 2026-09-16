@@ -2,17 +2,33 @@
   "claims": [
     {
       "detail": "Absolute difference 0 <= tolerance 1e-12.",
-      "expected": 3.310546875,
-      "id": "EXAMPLE-COMPUTATION-001",
+      "expected": 0.936,
+      "id": "PILOT-BM25-001",
       "limitations": [
-        "The choices are independent and uniformly distributed."
+        "Target-enriched reduced corpus, not full-benchmark performance.",
+        "BM25 retrieval only; no LLM or agent-selection result."
       ],
-      "observed": 3.310546875,
+      "observed": 0.936,
       "passed": true,
-      "scope": "Template fixture only; not a public research contribution.",
-      "site_visible": false,
-      "statement": "For four independent uniform choices among eight options, the expected number of distinct choices is 3.310546875.",
-      "status": "exact-computational"
+      "scope": "250 single-product queries; 11,019 products including all targets and hash-sampled distractors; one fixed field order.",
+      "site_visible": true,
+      "statement": "Core-specification BM25 Recall@10 is 0.936 in the archived reduced-corpus pilot.",
+      "status": "numerical"
+    },
+    {
+      "detail": "Absolute difference 4.86e-17 <= tolerance 1e-12.",
+      "expected": -0.056,
+      "id": "PILOT-BM25-002",
+      "limitations": [
+        "Conditional on the reduced corpus, value-only renderer, and fixed grouping.",
+        "Not evidence of a universal optimal attribute count or LLM overload."
+      ],
+      "observed": -0.05600000000000005,
+      "passed": true,
+      "scope": "Paired comparison of core_specs and all_applicable on the same 250 queries and 11,019 products.",
+      "site_visible": true,
+      "statement": "Adding the final mapped-field group lowers pilot Recall@10 by 0.056.",
+      "status": "computational-pattern"
     }
   ]
 }

@@ -27,7 +27,7 @@ MAV(k) = R(k) - R(k - 1)
 The primary saturation statistic is the smallest representation that retains a target fraction of the best observed performance:
 
 ```text
-k*_95 = min k such that R(k) >= 0.95 * R(max)
+k*_95 = min k such that R(k) >= 0.95 * max_j R(j)
 ```
 
 We will also report 90% and 99% thresholds, negative marginal-value events, token/field efficiency, and uncertainty intervals.
@@ -90,7 +90,7 @@ paper/                     manuscript source
 artifacts/                 generated evidence only
 ```
 
-The `study/` scaffold is deliberately thin. Benchmark-specific code should adapt benchmark products, queries, qrels, and index builders into a common experiment contract. It should not reimplement ShoppingBench or WebShop.
+The `study/` pipeline streams one fixed corpus into five representations. Benchmark-specific code should adapt benchmark products, queries, qrels, and index builders into a common experiment contract. It should not reimplement ShoppingBench or WebShop.
 
 ## Scientific guardrails
 
@@ -102,9 +102,9 @@ We will report paired uncertainty estimates across the same queries and use repe
 
 ## Current milestone
 
-**Milestone 0: scaffold and validate the experimental contract.**
+**Milestone 1: working BM25 pilot with archived real-data evidence.**
 
-The first implementation target is a deterministic pilot that can render several product representations from the same ShoppingBench product record, build separate BM25 indexes, run identical queries against each index, and emit paired retrieval metrics. No LLM calls are required for this milestone.
+The runner builds real Pyserini/Anserini Lucene indexes, pins BM25 parameters, validates corpus and query identities, and emits query-level metrics, paired bootstrap intervals, marginal gains, and discrete saturation estimates. Two repeated real-data runs produced byte-identical retrieval outputs and analysis. The archived pilot uses 250 queries and an explicitly reduced, target-enriched corpus; see [pilot evidence](docs/pilot-evidence.md). The next research milestone is the full corpus plus ordering controls.
 
 See [`docs/experiment-plan.md`](docs/experiment-plan.md) and [`research/question.md`](research/question.md) for the complete plan.
 
@@ -114,18 +114,39 @@ ShoppingBench publishes the processed corpus as `resources/documents.jsonl.gz` a
 the single-product tasks as `data/synthesize_product_test.jsonl`. With Java 21 installed:
 
 ```bash
-python -m pip install -e '.[experiment]'
+# Install the CPU dependency first to avoid Pyserini pulling CUDA runtimes.
+python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -e '.[experiment]' -e packages/python
 python -m study.run_shoppingbench_pilot \
   --documents /path/to/ShoppingBench/resources/documents.jsonl.gz \
   --queries /path/to/ShoppingBench/data/synthesize_product_test.jsonl \
-  --output artifacts/shoppingbench-pilot
+  --output runs/shoppingbench-pilot
 ```
 
 The command derives qrels from `reward.product_id`, writes one cumulative corpus and
 one BM25 index per representation level, then emits identical-query JSONL runs,
-paired query-level metrics, and `summary.json`. It does not invoke an LLM or modify
+paired query-level metrics, `summary.json`, `analysis.json`, representation sizes, and
+a hash/version manifest. `--config` consumes the checked-in experiment settings.
+Use a new output directory per run; incomplete runs are removed and existing runs
+are never overwritten. `paperkit build` replaces `artifacts/`, so keep raw runs under `runs/`. It does not invoke an LLM or modify
 the source benchmark files.
 
 ## Release framework
 
 This repository was created from a checked research-paper/package template. The existing `paperkit` tooling, claim ledger, reproducibility artifacts, manuscript build, and release validation remain the publication framework. Experimental results should flow into generated artifacts rather than being manually copied into the paper.
+
+### Validation
+
+```bash
+python -m pip install -e '.[dev,experiment]' -e packages/python
+python -m ruff check .
+python -m pytest
+RUN_BM25_INTEGRATION=1 python -m pytest tests/test_pilot_contract.py -k real_lucene
+python -m paperkit.cli validate
+python -m paperkit.cli build
+```
+
+CI runs the real-index smoke test separately with Java 21. It checks both repeated-run
+identity and that ablated fields cannot leak into retrieval. The publication site consumes
+the registered reduced-corpus pilot, not the inherited occupancy fixture. Public release
+remains blocked while manuscript and study-completion gates are unresolved.

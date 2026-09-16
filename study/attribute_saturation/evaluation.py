@@ -10,6 +10,8 @@ def query_metrics(
     ranked_product_ids: Sequence[str], relevant_product_ids: set[str]
 ) -> dict[str, float]:
     """Compute binary-relevance metrics for one ranked product list."""
+    if len(set(ranked_product_ids)) != len(ranked_product_ids):
+        raise ValueError("Duplicate product ids in ranking would inflate retrieval metrics")
     relevant_ranks = [
         rank
         for rank, product_id in enumerate(ranked_product_ids, start=1)
@@ -43,18 +45,26 @@ def evaluate_run(
             relevant.setdefault(qrel.query_id, set()).add(qrel.product_id)
 
     results = []
+    seen: set[str] = set()
     for row in run:
         query_id = str(row["query_id"])
+        if query_id in seen or query_id not in relevant:
+            raise ValueError(f"Duplicate or unjudged query id: {query_id}")
+        seen.add(query_id)
         hits = row.get("hits", [])
         if not isinstance(hits, list):
             raise ValueError(f"run row {query_id} has a non-list 'hits' field")
-        ranked_ids = [str(hit["product_id"]) for hit in hits if isinstance(hit, dict)]
+        if any(not isinstance(hit, dict) or "product_id" not in hit for hit in hits):
+            raise ValueError(f"Malformed hit for query {query_id}")
+        ranked_ids = [str(hit["product_id"]) for hit in hits]
         results.append(
             {
                 "query_id": query_id,
                 "metrics": query_metrics(ranked_ids, relevant.get(query_id, set())),
             }
         )
+    if seen != set(relevant):
+        raise ValueError("Run is missing judged queries; empty-hit rows must be explicit")
     return results
 
 

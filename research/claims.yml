@@ -1,2 +1,34 @@
 schema_version: 1
-claims: []
+claims:
+  - id: PILOT-BM25-001
+    statement: "Core-specification BM25 Recall@10 is 0.936 in the archived reduced-corpus pilot."
+    status: numerical
+    scope: "250 single-product queries; 11,019 products including all targets and hash-sampled distractors; one fixed field order."
+    evaluator: paperkit.evaluators:evaluate_registered_result
+    result_key: core_specs_recall
+    expected: 0.936
+    tolerance: 1.0e-12
+    evidence:
+      - packages/python/src/product_attribute_saturation/pilot/manifest.json
+      - packages/python/src/product_attribute_saturation/pilot/metrics/core_specs.jsonl
+    manuscript_labels: ["sec:pilot"]
+    site_visible: true
+    limitations:
+      - "Target-enriched reduced corpus, not full-benchmark performance."
+      - "BM25 retrieval only; no LLM or agent-selection result."
+  - id: PILOT-BM25-002
+    statement: "Adding the final mapped-field group lowers pilot Recall@10 by 0.056."
+    status: computational-pattern
+    scope: "Paired comparison of core_specs and all_applicable on the same 250 queries and 11,019 products."
+    evaluator: paperkit.evaluators:evaluate_registered_result
+    result_key: full_minus_core_recall
+    expected: -0.056
+    tolerance: 1.0e-12
+    evidence:
+      - packages/python/src/product_attribute_saturation/pilot/analysis.json
+      - packages/python/src/product_attribute_saturation/pilot/runs/all_applicable.jsonl
+    manuscript_labels: ["sec:pilot"]
+    site_visible: true
+    limitations:
+      - "Conditional on the reduced corpus, value-only renderer, and fixed grouping."
+      - "Not evidence of a universal optimal attribute count or LLM overload."

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping, Sequence
 
 
@@ -20,8 +21,15 @@ def saturation_point(
         raise ValueError("target_fraction must be in (0, 1]")
     if not scores_by_level:
         return None
-
+    if set(scores_by_level) != set(ordered_levels) or len(set(ordered_levels)) != len(
+        ordered_levels
+    ):
+        raise ValueError("scores and ordered_levels must contain exactly the same unique levels")
+    if any(not math.isfinite(value) or value < 0 for value in scores_by_level.values()):
+        raise ValueError("scores must be finite and non-negative")
     best = max(scores_by_level.values())
+    if best == 0:
+        return None  # Zero retrieval quality is not evidence of saturation.
     threshold = best * target_fraction
     for level in ordered_levels:
         score = scores_by_level.get(level)

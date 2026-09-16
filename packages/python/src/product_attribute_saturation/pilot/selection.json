@@ -1,0 +1,14 @@
+{
+  "divisor": 256,
+  "evidence_boundary": "Engineering pilot only; target-enriched reduced corpus. Do not interpret as full-corpus benchmark performance.",
+  "method": "all target products plus SHA256(seed:product_id) mod divisor == 0",
+  "seed": 20260903,
+  "selected_products": 11019,
+  "selected_sha256": "e1666bb4a377aeddc84d441177c495494ff37a3ce4fd58b292472b8720090b54",
+  "source_products": 2746368,
+  "source_sha256": {
+    "documents": "a0ba9a8618ce72a7b383a6de31acf6e5bf138873da0d13ad8a1a6b0271e8e9d1",
+    "queries": "46d044e1129f3f8782ac6fef8409692581ff4ff3834e2d3a0fc5d54e0dc9ae8f"
+  },
+  "target_products": 250
+}

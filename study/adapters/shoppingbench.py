@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import gzip
 import json
-import shutil
 import subprocess
 import sys
 from collections.abc import Iterable, Iterator, Mapping
@@ -59,11 +58,7 @@ def _text_values(value: object) -> Iterable[str]:
 
 def render_document(product: Mapping[str, Any], level: RepresentationLevel) -> dict[str, Any]:
     rendered = render_product(product, SHOPPINGBENCH_GROUPS, level)
-    contents = "\n".join(
-        text
-        for field in rendered.values()
-        for text in _text_values(field)
-    )
+    contents = "\n".join(text for field in rendered.values() for text in _text_values(field))
     return {
         "id": str(product["product_id"]),
         "contents": contents,
@@ -77,18 +72,29 @@ class ShoppingBenchAdapter:
     name = "shoppingbench"
 
     def __init__(self, documents_path: Path, queries_path: Path, top_k: int = 10) -> None:
+        if top_k < 10:
+            raise ValueError("top_k must be at least 10 for the registered recall/nDCG cutoffs")
         self.documents_path = documents_path
         self.queries_path = queries_path
         self.top_k = top_k
 
     def products(self) -> Iterable[ProductRecord]:
+        seen: set[str] = set()
         for document in _jsonl(self.documents_path):
             product = document.get("product")
             if not isinstance(product, dict):
                 raise ValueError("ShoppingBench document is missing object field 'product'")
-            product_id = str(product.get("product_id", document.get("id", "")))
-            if not product_id:
+            raw_id = product.get("product_id", document.get("id"))
+            if raw_id is None or isinstance(raw_id, bool) or not str(raw_id).strip():
                 raise ValueError("ShoppingBench document is missing a product id")
+            product_id = str(raw_id)
+            if "id" in document and str(document["id"]) != product_id:
+                raise ValueError(f"Conflicting document/product ids: {product_id}")
+            if product_id in seen:
+                raise ValueError(f"Duplicate product id: {product_id}")
+            seen.add(product_id)
+            if not isinstance(product.get("title"), str) or not product["title"].strip():
+                raise ValueError(f"Product {product_id} has no title")
             fields = dict(product)
             fields["product_id"] = product_id
             yield ProductRecord(product_id=product_id, fields=fields)
@@ -105,6 +111,10 @@ class ShoppingBenchAdapter:
             reward = row.get("reward")
             if not isinstance(reward, dict) or "product_id" not in reward:
                 raise ValueError(f"ShoppingBench query row {index} has no reward.product_id")
+            if reward["product_id"] is None or isinstance(reward["product_id"], (bool, list, dict)):
+                raise ValueError(f"ShoppingBench query row {index} has an invalid product id")
+            if not str(reward["product_id"]).strip():
+                raise ValueError(f"ShoppingBench query row {index} has an empty product id")
             yield RelevanceRecord(str(index), str(reward["product_id"]))
 
     def render_documents(self, level: RepresentationLevel, output_path: Path) -> None:
@@ -116,7 +126,7 @@ class ShoppingBenchAdapter:
 
     def build_index(self, rendered_documents: Path, output_dir: Path) -> None:
         if output_dir.exists():
-            shutil.rmtree(output_dir)
+            raise FileExistsError(f"Refusing to replace existing index: {output_dir}")
         output_dir.mkdir(parents=True, exist_ok=True)
         subprocess.run(
             [
@@ -138,23 +148,37 @@ class ShoppingBenchAdapter:
             check=True,
         )
 
-    def run_retrieval(self, index_dir: Path, output_path: Path) -> None:
+    def run_retrieval(
+        self, index_dir: Path, output_path: Path, *, expected_documents: int | None = None
+    ) -> None:
         try:
-            from pyserini.search.lucene import LuceneSearcher
+            from pyserini.pyclass import autoclass
         except ImportError as error:  # pragma: no cover - depends on optional Java stack
             raise RuntimeError("install the 'experiment' extra to run Pyserini") from error
 
-        searcher = LuceneSearcher(str(index_dir))
+        # The high-level search package eagerly imports neural encoders, including
+        # an OpenAI client. Use the very same Anserini class without those imports.
+        searcher = autoclass("io.anserini.search.SimpleSearcher")(str(index_dir))
+        # Pin Pyserini's default BM25 parameters instead of relying on implicit defaults.
+        searcher.set_bm25(0.9, 0.4)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        with output_path.open("w", encoding="utf-8", newline="\n") as stream:
-            for query in self.queries():
-                hits = searcher.search(query.text, k=self.top_k, remove_dups=True)
-                row = {
-                    "query_id": query.query_id,
-                    "query": query.text,
-                    "hits": [
-                        {"product_id": hit.docid, "rank": rank, "score": hit.score}
-                        for rank, hit in enumerate(hits, start=1)
-                    ],
-                }
-                stream.write(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n")
+        try:
+            indexed = searcher.get_total_num_docs()
+            if expected_documents is not None and indexed != expected_documents:
+                raise ValueError(
+                    f"Index contains {indexed} documents; expected {expected_documents}"
+                )
+            with output_path.open("w", encoding="utf-8", newline="\n") as stream:
+                for query in self.queries():
+                    hits = searcher.search(query.text, self.top_k)
+                    row = {
+                        "query_id": query.query_id,
+                        "query": query.text,
+                        "hits": [
+                            {"product_id": hit.docid, "rank": rank, "score": hit.score}
+                            for rank, hit in enumerate(hits, start=1)
+                        ],
+                    }
+                    stream.write(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n")
+        finally:
+            searcher.close()

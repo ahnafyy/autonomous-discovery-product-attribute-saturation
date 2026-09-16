@@ -26,3 +26,5 @@ paper/*.fls
 paper/*.log
 paper/*.out
 paper/*.pdf
+/runs/
+/smoke-output/

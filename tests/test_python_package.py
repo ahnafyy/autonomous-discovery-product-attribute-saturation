@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
-from example_study import expected_distinct_choices
+from product_attribute_saturation import expected_distinct_choices
 
 from paperkit.pipeline import build
 

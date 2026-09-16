@@ -1,7 +1,8 @@
 metric,value
-choices,4
-expected_distinct,3.310546875
-expected_distinct_denominator,512
-expected_distinct_numerator,1695
-options,8
-random_seed,20260723
+core_specs_recall,0.936
+full_minus_core_recall,-0.05600000000000005
+pilot_products,11019
+pilot_queries,250
+random_seed,20260903
+representation_levels,5
+status,Reduced-corpus BM25 pilot; not a full-benchmark or LLM result
