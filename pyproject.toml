@@ -14,9 +14,15 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+experiment = [
+  "pyserini==1.0.0",
+  "transformers>=4.6,<5",
+  "numpy>=1.26,<3",
+]
 dev = [
   "build>=1.2,<2",
   "pytest>=8.3",
+  "numpy>=1.26,<3",
   "ruff>=0.11",
 ]
 
@@ -24,7 +30,7 @@ dev = [
 paperkit = "paperkit.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/paperkit"]
+packages = ["src/paperkit", "study"]
 
 [tool.pytest.ini_options]
 addopts = "-q"

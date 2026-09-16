@@ -3,17 +3,17 @@ requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
-name = "example-study"
+name = "product-attribute-saturation"
 version = "0.1.0"
 description = "Exact occupancy calculations accompanying the template research paper"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
-authors = [{ name = "Research Paper and Package Template contributors" }]
+authors = [{ name = "Khondoker Ahnaf Prio" }]
 
 [project.urls]
-Repository = "https://github.com/OWNER/REPOSITORY"
-Paper = "https://OWNER.github.io/REPOSITORY/"
+Repository = "https://github.com/ahnafyy/autonomous-discovery-product-attribute-saturation"
+Paper = "https://ahnafyy.github.io/autonomous-discovery-product-attribute-saturation/"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/example_study"]
+packages = ["src/product_attribute_saturation"]

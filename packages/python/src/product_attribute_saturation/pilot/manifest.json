@@ -1,0 +1,113 @@
+{
+  "bm25": {
+    "b": 0.4,
+    "k1": 0.9
+  },
+  "config": {
+    "benchmark": "shoppingbench",
+    "bootstrap_samples": 2000,
+    "id": "shoppingbench-bm25-pilot",
+    "llm": {
+      "enabled": false
+    },
+    "metrics": [
+      "recall@1",
+      "recall@5",
+      "recall@10",
+      "mrr",
+      "ndcg@5",
+      "ndcg@10"
+    ],
+    "random_order_seeds": [],
+    "representation_levels": [
+      "minimum",
+      "identity",
+      "variants",
+      "core_specs",
+      "all_applicable"
+    ],
+    "retrieval": "bm25",
+    "saturation_targets": [
+      0.9,
+      0.95,
+      0.99
+    ],
+    "seed": 20260903
+  },
+  "config_sha256": "923396da7dd2b6ce6c6f9d8ec3516f29674e8bc80f45ba7d55a7414475d68526",
+  "dependencies": {
+    "numpy": "2.3.5",
+    "pyserini": "1.0.0"
+  },
+  "evidence_boundary": "Observed subset/corpus only; no LLM or full-agent claims. Qrels identify a target product, not every acceptable substitute. Bootstrap intervals are pointwise, conditional on this corpus and group order.",
+  "field_groups": {
+    "all_applicable": [
+      "short_description",
+      "description",
+      "price",
+      "sold_count",
+      "service"
+    ],
+    "core_specs": [
+      "attributes",
+      "specification"
+    ],
+    "identity": [
+      "brand",
+      "category"
+    ],
+    "minimum": [
+      "title"
+    ],
+    "variants": [
+      "sku_options"
+    ]
+  },
+  "files": {
+    "analysis.json": "ac04519fc5f9c62bf42b42e14d3806214b2ea7f8d18ecb657891b22c8bce80c6",
+    "corpora/all_applicable/documents.jsonl": "7cc3af808ca89ed46dcae6817c5082063eb59eb47f18fbc39f6918909fde3210",
+    "corpora/core_specs/documents.jsonl": "60ad878576b20134f334c3e092e8107d62877612a8308b4adaf3bb50c80d59ba",
+    "corpora/identity/documents.jsonl": "bce3ecbc6731dca239144c7c22bf4550289e6316951713b0474ace808b6ba24a",
+    "corpora/minimum/documents.jsonl": "e9db25d129647245e7ce7922cb31565e5d20fef00af3a2ebdfccb752c833c32a",
+    "corpora/variants/documents.jsonl": "57330cea6d47dfbdd35f49c1408889b90bc3cf8e6f526fd2f338d454e2bd7a52",
+    "metrics/all_applicable.jsonl": "16de188112ae2bf6b9105b6cf3fffcece76d2034e5683e82a3e5b661002fbf82",
+    "metrics/core_specs.jsonl": "031cba39bdc09d929247726f9c34fba4e057c63607ae5353f7f8a8ec96e287ad",
+    "metrics/identity.jsonl": "ede1cb24fb2c5c99ac8758d4d2a1cebbde995b7154f7e14ff2f85ceb4d01508a",
+    "metrics/minimum.jsonl": "20709ac38a64061732db23e196b96fd8f5f6e58606bfd8771b094a5d1071cfc3",
+    "metrics/variants.jsonl": "d0ad4e6924978cc2a3d0a5685ad5b474a046e913ca5beb09756a0f1bf873e356",
+    "qrels.json": "d21215f0a1ad9c0e19a4c43e3217d3ee0b4152755ffa4bc0ef222d52120497b2",
+    "queries.json": "20daf184f309b58ba80c13caa2bb95ebe6324a82ea8a5ba1d62de682fbb01379",
+    "representation-stats.json": "7f40ad4f002fa371e98cff797bf072b794f3cc67264b6157c811fac0e79b52af",
+    "runs/all_applicable.jsonl": "52b4df5c9f4ca19e16b25fba100e7465f933b0626da54a095ca4f7256bc9a2ec",
+    "runs/core_specs.jsonl": "c397330d499506f081797e2b953461106c777ab98c9ff1af612160bbe2833bd0",
+    "runs/identity.jsonl": "40127b632f42081ec4de48cd57bb8569152615feda3b04345015e74f7f05ddff",
+    "runs/minimum.jsonl": "b1f9093b019c6f2b75d73a52a59d858783563ab75971a865a83c2e453b046729",
+    "runs/variants.jsonl": "475d1d85bc6d7cb48a038dbecc8db99d582e8b7e1a1d8836c48d0cdd1d2b7d61",
+    "summary.json": "47a5f0d0cc7c63cf4fef946c83953f9871bb05f8d0150bb251458e44205055f8"
+  },
+  "input_sha256": {
+    "documents": "e1666bb4a377aeddc84d441177c495494ff37a3ce4fd58b292472b8720090b54",
+    "queries": "46d044e1129f3f8782ac6fef8409692581ff4ff3834e2d3a0fc5d54e0dc9ae8f"
+  },
+  "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+  "mrr_scope": "MRR truncated at 10; not unbounded MRR",
+  "product_count": 11019,
+  "python": "3.12.14",
+  "query_count": 250,
+  "renderer": "shoppingbench-values-v1",
+  "schema_version": 1,
+  "source_sha256": {
+    "__init__.py": "79b6fc6741b41688e55b8bde05381c921aadd2dbf97f6dcf06d75b0552e5df07",
+    "adapters/__init__.py": "8da95292a31c5f636bad3b8d50538fc3200bddd18822214f37be16ce09634614",
+    "adapters/base.py": "0d362c0eee71bb7f5226d64e787f6b43348597a191334f89027c99ba3c70c73f",
+    "adapters/shoppingbench.py": "a90cb18df529fd95ec8c61216687a5ae0e75d80f676b701358837256537adce9",
+    "attribute_saturation/__init__.py": "628629bc3d61f55e83d9ec24c7c87be0e3759b5bd5d862030c52e40a4ef25650",
+    "attribute_saturation/analysis.py": "6045933498e92a1f6140002bdad860d3c08df976a0e583e5d6fb83630383a6ac",
+    "attribute_saturation/evaluation.py": "5173965049ae1bb2810f98cd17cc2a2409758c0fc7eba1d94c31fa00507d1718",
+    "attribute_saturation/metrics.py": "60d0657e3294e184099d0a4d9f7a596f912b653fa64776196c769a6bd42690f2",
+    "attribute_saturation/representation.py": "41145a343c3c889b98f179c6be6a767861dec0838dd16f818035064f32d301ad",
+    "prepare_shoppingbench_subset.py": "b75afa8c81bbb877a41f16b0423e6a1a818dc4a00603c0bb9795b8278fb4a982",
+    "run_shoppingbench_pilot.py": "2422f4272ebcd1820d4b04c4eed255ea487329d87ec1adae661a93e1cdb7111a"
+  },
+  "top_k": 10
+}

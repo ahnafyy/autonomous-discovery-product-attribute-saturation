@@ -1,4 +1,15 @@
-\section{Results}
+\section{Reduced-Corpus Engineering Pilot}\label{sec:pilot}
+% Claims: PILOT-BM25-001, PILOT-BM25-002
+The archived BM25 pilot contains \ResultPilotQueries{} queries and
+\ResultPilotProducts{} products. It includes every target product plus
+hash-sampled distractors, so its difficulty differs from the complete corpus.
+The core-specification representation obtains Recall@10 of
+\ResultCoreSpecsRecall{}. Adding the final mapped-field group changes
+Recall@10 by \ResultFullMinusCoreRecall{}.
 
-TODO: Organize around registered claim IDs. Use generated macros such as
-\verb|\ResultExpectedDistinct| rather than typing computed values independently.
+These observations apply only to the fixed reduced corpus, field-group order,
+and value-only renderer. They are not full-benchmark results, do not isolate
+attribute count from field identity or document length, and do not measure LLM
+selection. The archived query-level runs, paired bootstrap analysis, input hashes,
+and environment manifest are distributed with the Python package. Full-corpus
+replication and randomized-order controls remain open.

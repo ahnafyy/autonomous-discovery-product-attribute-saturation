@@ -53,10 +53,13 @@ def render_project_metadata(project_path: Path) -> str:
         author = _required_mapping(author_value, f"authors[{index}]")
         name = latex_escape(_required_text(author, "name", f"authors[{index}]"))
         affiliations = author.get("affiliations")
-        if not isinstance(affiliations, list) or not affiliations:
-            raise ConfigurationError(f"authors[{index}].affiliations must be a non-empty list")
-        affiliation = latex_escape(str(affiliations[0]))
-        author_parts.append(f"{name}\\\\{{\\small {affiliation}}}")
+        if not isinstance(affiliations, list):
+            raise ConfigurationError(f"authors[{index}].affiliations must be a list")
+        if affiliations:
+            affiliation = latex_escape(str(affiliations[0]))
+            author_parts.append(f"{name}\\\\{{\\small {affiliation}}}")
+        else:
+            author_parts.append(name)
 
     keywords = project.get("keywords")
     categories = project.get("arxiv_categories")

@@ -1,5 +1,5 @@
 {
-  "name": "@example/example-study",
+  "name": "@ahnafyy/product-attribute-saturation",
   "version": "0.1.0",
   "description": "Exact occupancy calculations accompanying the template research paper",
   "type": "module",
@@ -20,7 +20,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWNER/REPOSITORY.git"
+    "url": "git+https://github.com/ahnafyy/autonomous-discovery-product-attribute-saturation.git"
   },
   "publishConfig": {
     "access": "public",

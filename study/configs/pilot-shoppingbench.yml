@@ -1,0 +1,26 @@
+experiment:
+  id: shoppingbench-bm25-pilot
+  seed: 20260903
+  benchmark: shoppingbench
+  retrieval: bm25
+  representation_levels:
+    - minimum
+    - identity
+    - variants
+    - core_specs
+    - all_applicable
+  metrics:
+    - recall@1
+    - recall@5
+    - recall@10
+    - mrr
+    - ndcg@5
+    - ndcg@10
+  saturation_targets:
+    - 0.90
+    - 0.95
+    - 0.99
+  bootstrap_samples: 2000
+  random_order_seeds: []
+  llm:
+    enabled: false

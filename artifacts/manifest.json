@@ -1,17 +1,18 @@
 {
   "all_executable_claims_passed": true,
   "claims": [
-    "EXAMPLE-COMPUTATION-001"
+    "PILOT-BM25-001",
+    "PILOT-BM25-002"
   ],
   "files": {
-    "claim-results.json": "49bc61d2ab4cf8addbafd963c100f28454ed032c91e40c83b3fc6d3fd27a37a6",
+    "claim-results.json": "3c4d87932ccc108b78d50ec03fbd01db84b1a099e7a2a15afe6ec60feb2e4710",
     "conformance/expected-distinct.json": "5722e14a205744169d7e1ae07a86bceff1a55f8ea079a7d875fafe2213195f3e",
-    "data/summary.csv": "cbd50828a47957de56c47a8c055f0f2db755e7e0bf46ce77a1443e5a222c1ddc",
-    "results.json": "7aa3540fa279f766bd5e010b35a0ba9ed127d78754bace60d895ed420e966522",
-    "site-data.json": "dcc26925c4063996d1a7225046ea991d090e8ce8e6537a10cff4edd7728edcee",
-    "tables/claim_status.tex": "dbc0a1196cd73e1f5a19ead0f3bb773236532b566779925039d9024fb9a7d3d8",
-    "tables/project_metadata.tex": "d326e885735eae438e8c11acc1c823f01c51a4d886006c23ec509688c08fbdc6",
-    "tables/result_macros.tex": "7c8983cbeacfe0006dedf0573b18c84a435b0b97ac1caa9957dfbae3dae560a0"
+    "data/summary.csv": "5f923fa25b7df1eb751063a778fafd2769388e3fc511c0bc12fa2d792d1fcb34",
+    "results.json": "28da2dde30d3663e7a9ccdcfc955e282cc4de3f40ec6bb65b98b7011853e8b8d",
+    "site-data.json": "4af930c09d4705559a57971f8b3b8505ca7a3f99f92a5ad0b4eccfde58f5d55b",
+    "tables/claim_status.tex": "68f94b79c40afdaa7b9618a56d80d5e9799c6940bfde4d67ef3acc94a8230809",
+    "tables/project_metadata.tex": "e4de7214b63a8d672a8d2af78c8584acdc9239705c5b466a940de0ae08b625bf",
+    "tables/result_macros.tex": "0f0c67009501c6fa3c7509d5930decd10b6a426a4bd539e451b2813a082b58f2"
   },
   "generator": {
     "name": "paperkit",
@@ -19,13 +20,13 @@
   },
   "project": {
     "packages": {
-      "javascript": "@example/example-study",
-      "python": "example-study"
+      "javascript": "@ahnafyy/product-attribute-saturation",
+      "python": "product-attribute-saturation"
     },
-    "slug": "paper-project",
-    "title": "TODO: Research title",
+    "slug": "autonomous-discovery-product-attribute-saturation",
+    "title": "How Much Product Data Is Enough?",
     "version": "0.1.0"
   },
-  "random_seed": 20260723,
+  "random_seed": 20260903,
   "schema_version": 1
 }

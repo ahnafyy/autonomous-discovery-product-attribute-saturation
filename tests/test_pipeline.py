@@ -22,20 +22,24 @@ def test_build_is_deterministic_and_claims_pass(tmp_path: Path) -> None:
 
     assert _snapshot(first) == _snapshot(second)
     claim_results = json.loads((first / "claim-results.json").read_text(encoding="utf-8"))
-    assert claim_results["claims"][0]["passed"] is True
+    assert all(claim["passed"] for claim in claim_results["claims"])
+    assert {claim["id"] for claim in claim_results["claims"]} == {
+        "PILOT-BM25-001",
+        "PILOT-BM25-002",
+    }
     manifest = json.loads((first / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["all_executable_claims_passed"] is True
     assert "results.json" in manifest["files"]
     assert "conformance/expected-distinct.json" in manifest["files"]
     site_data = json.loads((first / "site-data.json").read_text(encoding="utf-8"))
-    assert site_data["results"]["expected_distinct"] == 3.310546875
-    assert site_data["claims"][0]["id"] == "EXAMPLE-COMPUTATION-001"
-    assert site_data["packages"]["python"]["distribution"] == "example-study"
-    assert site_data["packages"]["javascript"]["name"] == "@example/example-study"
+    assert "expected_distinct" not in site_data["results"]
+    assert len(site_data["claims"]) == 2
+    assert site_data["packages"]["python"]["distribution"] == "product-attribute-saturation"
+    assert site_data["packages"]["javascript"]["name"] == "@ahnafyy/product-attribute-saturation"
     metadata = (first / "tables" / "project_metadata.tex").read_text(encoding="utf-8")
     assert "\\newcommand{\\PaperTitle}" in metadata
     claim_table = (first / "tables" / "claim_status.tex").read_text(encoding="utf-8")
-    assert "EXAMPLE-COMPUTATION-001" in claim_table
+    assert "EXAMPLE-COMPUTATION-001" not in claim_table
 
 
 def test_generated_tex_can_be_staged(tmp_path: Path) -> None:

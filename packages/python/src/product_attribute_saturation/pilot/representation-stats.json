@@ -1,0 +1,27 @@
+{
+  "all_applicable": {
+    "field_count": 95674,
+    "utf8_bytes": 11545092,
+    "whitespace_tokens": 1615829
+  },
+  "core_specs": {
+    "field_count": 55588,
+    "utf8_bytes": 4124411,
+    "whitespace_tokens": 567611
+  },
+  "identity": {
+    "field_count": 26441,
+    "utf8_bytes": 1849120,
+    "whitespace_tokens": 301129
+  },
+  "minimum": {
+    "field_count": 11019,
+    "utf8_bytes": 1058594,
+    "whitespace_tokens": 164998
+  },
+  "variants": {
+    "field_count": 35206,
+    "utf8_bytes": 2522928,
+    "whitespace_tokens": 414240
+  }
+}
